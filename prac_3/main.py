@@ -72,6 +72,50 @@ def main():
                         file.write(result)
                     print(f"File content was updated!")
 
+            case 7:
+                if mode == 2:
+                    with open('file.txt', 'r') as file:
+                        string = file.read()
+                else:        
+                    string = ""
+                    while len(string) == 0:
+                        string = input(f"Type a string to encrypt:\n")
+                
+                key = ""
+                while len(key) == 0:
+                    key = input(f"Type a key for encryption (it must be the same length as string to encrypt):\n")
+                
+                result = encoder.vernam_encrypt(string, key)
+
+                if mode==2:
+                    with open('file.txt', 'w') as file:
+                        file.write(result)
+                    print(f"File content was updated!")
+                else:
+                    print(f"Encrypted string:\n", result, sep="")
+    
+            case 8:
+                if mode == 2:
+                    with open('file.txt', 'r') as file:
+                        string = file.read()  
+                else:      
+                    string = ""
+                    while len(string) == 0:
+                        string = input(f"Type a string to decrypt (numbers separated by a space):\n")
+                
+                key = ""
+                while len(key) == 0:
+                    key = input(f"Type a key for decryption (it must be the same length as amount of numbers in string to decrypt):\n")
+                
+                result = encoder.vernam_decrypt(string, key)
+                
+                if mode==2:
+                    with open('file.txt', 'w') as file:
+                        file.write(result)
+                    print(f"File content was updated!")
+                else:
+                    print(f"Encrypted string:\n", result, sep="")  
+
             case 0:
                 return
             case _:
