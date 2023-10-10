@@ -78,3 +78,27 @@ class Encoder:
                 coded += ' '
 
         return coded
+
+    def vernam_decrypt(self, coded, key):
+        coded = str(coded)
+        key = str(key)
+
+        while coded.count('  ')>0:
+            coded = coded.replace('  ', ' ')
+        coded = coded.split(' ')
+        
+        if len(coded) != len(key):
+            raise ValueError('The text must be the same lenght as key')
+      
+        word = ''
+
+        for i in range(len(coded)):
+            try:
+                sym1 = int(coded[i])
+            except:
+                raise ValueError('The text must be numbers separated by a space')
+            sym2 = ord(key[i])
+
+            word += chr(sym1^sym2)
+
+        return word
