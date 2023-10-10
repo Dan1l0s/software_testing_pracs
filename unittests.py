@@ -1,5 +1,5 @@
 import unittest
-from encoder import Encoder
+from features.steps.encoder import Encoder
 
 
 class EncoderTests(unittest.TestCase):
