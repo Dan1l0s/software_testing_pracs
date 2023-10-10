@@ -144,6 +144,45 @@ class Encoder:
                 uncyph_str = uncyph_str[:pos] + matrix[b_line][a_column] + uncyph_str[pos+1:]
             pos += 2
         return uncyph_str
+    
+    def playfair_decrypt(self, cyph_str, keyword):
+        if not keyword.isalpha():
+            raise TypeError("Text and keyword must be a string")
+        
+        matrix = initialize_matrix(keyword)
+
+        cyph_str = cyph_str.replace(" ", "")
+        cyph_str = cyph_str.replace("J", "I")
+        cyph_str = cyph_str.upper()
+
+        pos = 1
+        while pos < len(cyph_str):
+            if cyph_str[pos-1] == cyph_str[pos]:
+                cyph_str = cyph_str[:pos] + 'X' + cyph_str[pos:]
+            pos += 2
+        if len(cyph_str) % 2 == 1:
+            cyph_str += 'X'
+
+        matrix = np.array(matrix)
+        pos = 1
+        str_len = len(cyph_str)
+        while pos < str_len:
+            a = np.where(matrix == cyph_str[pos-1])
+            a_line, a_column = a[0][0], a[1][0]
+            b = np.where(matrix == cyph_str[pos])
+            b_line, b_column = b[0][0], b[1][0]
+
+            if a_line == b_line:
+                cyph_str = swap_from_line_reverse(matrix, a_line, a_column, cyph_str, pos-1)
+                cyph_str = swap_from_line_reverse(matrix, b_line, b_column, cyph_str, pos)
+            elif a_column == b_column:
+                cyph_str = swap_from_column_reverse(matrix, a_line, a_column, cyph_str, pos-1)
+                cyph_str = swap_from_column_reverse(matrix, b_line, b_column, cyph_str, pos)
+            else:
+                cyph_str = cyph_str[:pos-1] + matrix[a_line][b_column] + cyph_str[pos:]
+                cyph_str = cyph_str[:pos] + matrix[b_line][a_column] + cyph_str[pos+1:]
+            pos += 2
+        return cyph_str
 
 def initialize_matrix(keyword):
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', \
@@ -176,4 +215,16 @@ def swap_from_column(matrix, line_num, column_num, str, str_pos):
     new_char_pos = line_num + 1
     if new_char_pos > 4:
         new_char_pos = 0
+    return str[:str_pos] + matrix[new_char_pos][column_num] + str[str_pos+1:]
+
+def swap_from_line_reverse(matrix, line_num, column_num, str, str_pos):
+    new_char_pos = column_num - 1
+    if new_char_pos < 0:
+        new_char_pos = 4
+    return str[:str_pos] + matrix[line_num][new_char_pos] + str[str_pos+1:]
+
+def swap_from_column_reverse(matrix, line_num, column_num, str, str_pos):
+    new_char_pos = line_num - 1
+    if new_char_pos < 0:
+        new_char_pos = 4
     return str[:str_pos] + matrix[new_char_pos][column_num] + str[str_pos+1:]
