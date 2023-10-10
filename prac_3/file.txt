@@ -1,0 +1,4 @@
+Hello, world!
+We can encrypt
+Multiple lines!
+Awesome?
