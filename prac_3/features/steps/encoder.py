@@ -1,3 +1,5 @@
+import numpy as np
+
 class Encoder:
     def caesar_encrypt(self, text: str, offset: int) -> str:
         try:
@@ -102,3 +104,76 @@ class Encoder:
             word += chr(sym1^sym2)
 
         return word
+
+    def playfair_encrypt(self, uncyph_str, keyword):
+        if not keyword.isalpha():
+            raise TypeError("Text and keyword must be a string")
+        
+        matrix = initialize_matrix(keyword)
+
+        uncyph_str = uncyph_str.replace(" ", "")
+        uncyph_str = uncyph_str.replace("J", "I")
+        uncyph_str = uncyph_str.upper()
+        uncyph_str = ''.join(c for c in uncyph_str if c.isalpha())
+
+        pos = 1
+        while pos < len(uncyph_str):
+            if uncyph_str[pos-1] == uncyph_str[pos]:
+                uncyph_str = uncyph_str[:pos] + 'X' + uncyph_str[pos:]
+            pos += 2
+        if len(uncyph_str) % 2 == 1:
+            uncyph_str += 'X'
+
+        matrix = np.array(matrix)
+        pos = 1
+        str_len = len(uncyph_str)
+        while pos < str_len:
+            a = np.where(matrix == uncyph_str[pos-1])
+            a_line, a_column = a[0][0], a[1][0]
+            b = np.where(matrix == uncyph_str[pos])
+            b_line, b_column = b[0][0], b[1][0]
+
+            if a_line == b_line:
+                uncyph_str = swap_from_line(matrix, a_line, a_column, uncyph_str, pos-1)
+                uncyph_str = swap_from_line(matrix, b_line, b_column, uncyph_str, pos)
+            elif a_column == b_column:
+                uncyph_str = swap_from_column(matrix, a_line, a_column, uncyph_str, pos-1)
+                uncyph_str = swap_from_column(matrix, b_line, b_column, uncyph_str, pos)
+            else:
+                uncyph_str = uncyph_str[:pos-1] + matrix[a_line][b_column] + uncyph_str[pos:]
+                uncyph_str = uncyph_str[:pos] + matrix[b_line][a_column] + uncyph_str[pos+1:]
+            pos += 2
+        return uncyph_str
+
+def initialize_matrix(keyword):
+    alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', \
+                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    matrix = [[[], [], [], [], []], \
+            [[], [], [], [], []], \
+            [[], [], [], [], []], \
+            [[], [], [], [], []], \
+            [[], [], [], [], []]]
+    pos = 0
+    keyword = keyword.upper()
+    for i in range (5):
+        for j in range(5):
+            if pos < len(keyword):
+                letter_pos = alphabet.index(keyword[pos])
+                keyword = keyword.replace(keyword[pos], '')
+                matrix[i][j] = alphabet.pop(letter_pos)
+            else:
+                matrix[i][j] = alphabet.pop(0)
+            pos += 1
+    return matrix
+
+def swap_from_line(matrix, line_num, column_num, str, str_pos):
+    new_char_pos = column_num + 1
+    if new_char_pos > 4:
+        new_char_pos = 0
+    return str[:str_pos] + matrix[line_num][new_char_pos] + str[str_pos+1:]
+
+def swap_from_column(matrix, line_num, column_num, str, str_pos):
+    new_char_pos = line_num + 1
+    if new_char_pos > 4:
+        new_char_pos = 0
+    return str[:str_pos] + matrix[new_char_pos][column_num] + str[str_pos+1:]
