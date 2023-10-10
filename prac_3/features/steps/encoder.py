@@ -58,3 +58,23 @@ class Encoder:
             else:
                 result += symbol    
         return result
+
+
+    def vernam_encrypt(self, word, key):
+        word = str(word)
+        key = str(key)
+
+        if len(word) != len(key):
+            raise ValueError('The text must be the same lenght as key')
+        
+        coded = ''
+
+        for i in range(len(word)):
+            sym1 = ord(word[i])
+            sym2 = ord(key[i])
+
+            coded += str(sym1^sym2)
+            if i != len(word)-1:
+                coded += ' '
+
+        return coded
