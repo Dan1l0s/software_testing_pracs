@@ -2,7 +2,7 @@ import unittest
 from features.steps.encoder import Encoder
 
 
-class EncoderTests(unittest.TestCase):
+class CaesarEncoderTests(unittest.TestCase):
     encoder = Encoder()
 
     def test_caesar_encrypt_typeerror(self):
@@ -16,6 +16,20 @@ class EncoderTests(unittest.TestCase):
 
     def test_caesar_encrypt_ru(self):
         self.assertEqual(self.encoder.caesar_encrypt("Привет, мир!", 2), "Сткджф, окт!")
+
+
+class VernamEncoderTests(unittest.TestCase):
+    encoder = Encoder()
+
+    def test_vernam_encrypt_typeerror(self):
+        self.assertRaises(ValueError, self.encoder.vernam_encrypt, "london!", "system")
+
+    def test_vernam_encrypt_en(self):
+        self.assertEqual(self.encoder.vernam_encrypt("london", "system"), "31 22 29 16 10 3")
+
+    def test_vernam_encrypt(self):
+        self.assertEqual(self.encoder.vernam_encrypt("hello привет", "!!!!! !!!!!!"), "73 68 77 77 78 0 1054 1121 1049 1043 1044 1123")
+
 
 
 if __name__ == '__main__':
