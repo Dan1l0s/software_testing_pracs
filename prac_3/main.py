@@ -8,7 +8,7 @@ def main():
     mode = None
     while not mode:
         try:
-            mode = int(input("Choose interaction mode:\n1 - manual string input\n2 - encrypt file.txt content\nYour choice: "))
+            mode = int(input("Choose interaction mode:\n1 - manual string input\n2 - encrypt or decrypt file.txt content\nYour choice: "))
             if mode != 1 and mode != 2:
                 mode = None
                 print("Mode should be '1' or '2' integer!")
@@ -67,6 +67,34 @@ def main():
                 
                 if mode == 1:
                     print(f"{('Decrypted', 'Encrypted')[cmd == 1]} string:\n", result, sep="")
+                else:
+                    with open('file.txt', 'w') as file:
+                        file.write(result)
+                    print(f"File content was updated!")
+
+            case 3 | 4:
+                if mode == 2:
+                    with open('file.txt', 'r') as file:
+                        string = file.read()
+                else:
+                    string = ""
+                    while len(string) == 0:
+                        string = input(f"Type a string to {'encrypt' if cmd == 3 else 'decrypt'}:\n")
+
+                while True:
+                    keyword = (input(f"Type the keyword to {'encrypt' if cmd == 3 else 'decrypt'}: "))
+                    if keyword.isalpha():
+                        break
+                    else:
+                        print("Keyword must be a combination of roman letters without special symbols!")
+
+                if cmd == 3:
+                    result = encoder.playfair_encrypt(string, keyword)
+                else:
+                    result = encoder.playfair_decrypt(string, keyword)
+
+                if mode == 1:
+                    print(f"{'Encrypted' if cmd == 3 else 'Decrypted'} string:\n", result, sep="")
                 else:
                     with open('file.txt', 'w') as file:
                         file.write(result)
