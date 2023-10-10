@@ -4,7 +4,7 @@ def main():
     encoder = Encoder()
     while True:
         try:
-            cmd = int(input("""Select the option you need (1-8):
+            cmd = input("""Select the option you need (1-8):
     1) Encrypt string using Caesar cypher
     2) Decrypt string using Caesar cypher
     3) Encrypt string using Playfair cypher
@@ -12,7 +12,10 @@ def main():
     5) Encrypt string using Vigenere cypher
     6) Decrypt string using Vigenere cypher
     7) Encrypt string using Vernam cypher
-    8) Decrypt string using Vernam cypher\n"""))
+    8) Decrypt string using Vernam cypher\n""")
+            if cmd == "exit":
+                return
+            cmd = int(cmd)
         except:
             print("Input a number in range [1-8] to select an option or type 'exit' to close program")
             continue
