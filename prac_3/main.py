@@ -2,6 +2,7 @@ import os
 
 from features.steps.encoder import Encoder
 
+
 def main():
     os.chdir(os.path.dirname(__file__))
     encoder = Encoder()
@@ -42,7 +43,7 @@ def main():
         except:
             print("Input a number in range [0-8] to select an option")
             continue
-        
+
         match cmd:
             case 1 | 2:
                 if mode == 2:
@@ -64,7 +65,7 @@ def main():
                     result = encoder.caesar_encrypt(string, offset)
                 else:
                     result = encoder.caesar_decrypt(string, offset)
-                
+
                 if mode == 1:
                     print(f"{('Decrypted', 'Encrypted')[cmd == 1]} string:\n", result, sep="")
                 else:
@@ -108,7 +109,7 @@ def main():
                     string = ""
                     while len(string) == 0:
                         string = input(f"Type a string to {('encrypt', 'decrypt')[cmd == 6]}:\n")
-                
+
                 key = ""
                 while len(key) == 0:
                     key = input("Type the key of the cypher: ")
@@ -117,7 +118,7 @@ def main():
                     result = encoder.vijn_encrypt(string, key)
                 else:
                     result = encoder.vijn_decrypt(string, key)
-                
+
                 if mode == 1:
                     print(f"{('Decrypted', 'Encrypted')[cmd == 5]} string:\n", result, sep="")
                 else:
@@ -129,50 +130,51 @@ def main():
                 if mode == 2:
                     with open('file.txt', 'r') as file:
                         string = file.read()
-                else:        
+                else:
                     string = ""
                     while len(string) == 0:
                         string = input(f"Type a string to encrypt:\n")
-                
+
                 key = ""
                 while len(key) == 0:
                     key = input(f"Type a key for encryption (it must be the same length as string to encrypt):\n")
-                
+
                 result = encoder.vernam_encrypt(string, key)
 
-                if mode==2:
+                if mode == 2:
                     with open('file.txt', 'w') as file:
                         file.write(result)
                     print(f"File content was updated!")
                 else:
                     print(f"Encrypted string:\n", result, sep="")
-    
+
             case 8:
                 if mode == 2:
                     with open('file.txt', 'r') as file:
-                        string = file.read()  
-                else:      
+                        string = file.read()
+                else:
                     string = ""
                     while len(string) == 0:
                         string = input(f"Type a string to decrypt (numbers separated by a space):\n")
-                
+
                 key = ""
                 while len(key) == 0:
                     key = input(f"Type a key for decryption (it must be the same length as amount of numbers in string to decrypt):\n")
-                
+
                 result = encoder.vernam_decrypt(string, key)
-                
-                if mode==2:
+
+                if mode == 2:
                     with open('file.txt', 'w') as file:
                         file.write(result)
                     print(f"File content was updated!")
                 else:
-                    print(f"Encrypted string:\n", result, sep="")  
+                    print(f"Encrypted string:\n", result, sep="")
 
             case 0:
                 return
             case _:
                 print("Incorrect option!")
+
 
 if __name__ == '__main__':
     main()

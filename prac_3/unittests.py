@@ -30,6 +30,7 @@ class VernamEncoderTests(unittest.TestCase):
     def test_vernam_encrypt(self):
         self.assertEqual(self.encoder.vernam_encrypt("hello привет", "!!!!! !!!!!!"), "73 68 77 77 78 0 1054 1121 1049 1043 1044 1123")
 
+
 class PlayfairEncoderTests(unittest.TestCase):
     encoder = Encoder()
 
@@ -42,6 +43,7 @@ class PlayfairEncoderTests(unittest.TestCase):
     def test_playfair_encrypt_valueerror(self):
         self.assertRaises(TypeError, self.encoder.playfair_encrypt, "Oh hi Mark", "81327")
 
+
 class VijnEncoderTests(unittest.TestCase):
     encoder = Encoder()
 
@@ -53,6 +55,7 @@ class VijnEncoderTests(unittest.TestCase):
 
     def test_vijn_encrypt(self):
         self.assertEqual(self.encoder.vijn_encrypt("РТУ МИРЭА", "ключ"), "ЙМА ЕВЭГЩ")
-        
+
+
 if __name__ == '__main__':
     unittest.main()
