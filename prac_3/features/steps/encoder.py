@@ -183,6 +183,33 @@ class Encoder:
                 cyph_str = cyph_str[:pos] + matrix[b_line][a_column] + cyph_str[pos+1:]
             pos += 2
         return cyph_str
+    
+    def vijn_encrypt(self, plain_text, key):
+        if len(key)  == 0:
+                raise ValueError('Len of key should be more than 0')
+        encrypted_text = ""
+        key_length = len(key)
+        for i in range(len(plain_text)):
+            char = plain_text[i]
+            if char.isalpha():
+                is_upper = char.isupper()
+                char = char.upper()
+                key_char = key[i % key_length].upper()
+                key_code = ord(key_char) - ord('A')
+                if 'A' <= char <= 'Z':
+                    char_code = ord(char) - ord('A')
+                    encrypted_char_code = (char_code + key_code) % 26
+                    encrypted_char = chr(encrypted_char_code + ord('A'))
+                elif 'А' <= char <= 'Я':
+                    char_code = ord(char) - ord('А')
+                    encrypted_char_code = (char_code + key_code) % 32
+                    encrypted_char = chr(encrypted_char_code + ord('А'))
+                if not is_upper:
+                    encrypted_char = encrypted_char.lower()
+                encrypted_text += encrypted_char
+            else:
+                encrypted_text += char
+        return encrypted_text    
 
 def initialize_matrix(keyword):
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', \
