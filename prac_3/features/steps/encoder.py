@@ -210,6 +210,33 @@ class Encoder:
             else:
                 encrypted_text += char
         return encrypted_text    
+    
+    def vijn_decrypt(self, cipher_text, key):
+        if len(key) == 0 or key == "empty":
+            raise ValueError("Key should not be empty!")
+        decrypted_text = ""
+        key_length = len(key)
+        for i in range(len(cipher_text)):
+            char = cipher_text[i]
+            if char.isalpha():
+                is_upper = char.isupper()
+                char = char.upper()
+                key_char = key[i % key_length].upper()
+                key_code = ord(key_char) - ord('A')
+                if 'A' <= char <= 'Z':
+                    char_code = ord(char) - ord('A')
+                    decrypted_char_code = (char_code - key_code) % 26
+                    decrypted_char = chr(decrypted_char_code + ord('A'))
+                elif 'А' <= char <= 'Я':
+                    char_code = ord(char) - ord('А')
+                    decrypted_char_code = (char_code - key_code) % 32
+                    decrypted_char = chr(decrypted_char_code + ord('А'))
+                if not is_upper:
+                    decrypted_char = decrypted_char.lower()
+                decrypted_text += decrypted_char
+            else:
+                decrypted_text += char
+        return decrypted_text
 
 def initialize_matrix(keyword):
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', \
