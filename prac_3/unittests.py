@@ -42,6 +42,17 @@ class PlayfairEncoderTests(unittest.TestCase):
     def test_playfair_encrypt_valueerror(self):
         self.assertRaises(TypeError, self.encoder.playfair_encrypt, "Oh hi Mark", "81327")
 
+class VijnEncoderTests(unittest.TestCase):
+    encoder = Encoder()
 
+    def test_vijn_encrypt_typeerror(self):
+        self.assertRaises(ValueError, self.encoder.vijn_encrypt, "Hello, world!", "")
+
+    def test_vijn_encrypt_en(self):
+        self.assertEqual(self.encoder.vijn_encrypt("Hello, world!", "KEY"), "Rijvs, ambpb!")
+
+    def test_vijn_encrypt(self):
+        self.assertEqual(self.encoder.vijn_encrypt("РТУ МИРЭА", "ключ"), "ЙМА ЕВЭГЩ")
+        
 if __name__ == '__main__':
     unittest.main()
