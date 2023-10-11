@@ -40,7 +40,7 @@ def main():
     8) Decrypt string using Vernam cypher
     0) Exit the application\nYour choice: """))
         except:
-            print("Input a number in range [1-8] to select an option or type 'exit' to close program")
+            print("Input a number in range [0-8] to select an option")
             continue
         
         match cmd:
@@ -95,6 +95,31 @@ def main():
 
                 if mode == 1:
                     print(f"{'Encrypted' if cmd == 3 else 'Decrypted'} string:\n", result, sep="")
+                else:
+                    with open('file.txt', 'w') as file:
+                        file.write(result)
+                    print(f"File content was updated!")
+
+            case 5 | 6:
+                if mode == 2:
+                    with open('file.txt', 'r') as file:
+                        string = file.read()
+                else:
+                    string = ""
+                    while len(string) == 0:
+                        string = input(f"Type a string to {('encrypt', 'decrypt')[cmd == 6]}:\n")
+                
+                key = ""
+                while len(key) == 0:
+                    key = input("Type the key of the cypher: ")
+
+                if cmd == 5:
+                    result = encoder.vijn_encrypt(string, key)
+                else:
+                    result = encoder.vijn_decrypt(string, key)
+                
+                if mode == 1:
+                    print(f"{('Decrypted', 'Encrypted')[cmd == 5]} string:\n", result, sep="")
                 else:
                     with open('file.txt', 'w') as file:
                         file.write(result)
